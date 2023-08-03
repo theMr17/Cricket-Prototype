@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject striker;
     [SerializeField] private GameObject nonStriker;
     [SerializeField] private float runningSpeed;
+    [SerializeField] private GameObject runsContainer;
+    [SerializeField] private TMP_Text runsText;
 
     private bool canBowl = true;
     private bool hasBowled = false;
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
     private void GetRun()
     {
         runs = Random.Range(0, 6+1);
-        Debug.Log(runs);
+        runsText.text = runs.ToString();
     }
 
     private void AnimateRun() 
@@ -100,7 +103,6 @@ public class GameManager : MonoBehaviour
     private void ResetDelivery() 
     {
         runs = -1;
-        canBowl = true;
         hasBowled = false;
 
         striker.transform.position = strikerPos;
@@ -112,7 +114,15 @@ public class GameManager : MonoBehaviour
 
     private void DisplayRuns() 
     {
+        runsContainer.SetActive(true);
+        StartCoroutine(WaitForFunction());
+    }
 
+    IEnumerator WaitForFunction()
+    {
+        yield return new WaitForSeconds(2);
+        runsContainer.SetActive(false);
+        canBowl = true;
     }
 
     public void SetHasBowled(bool hasBowled)
